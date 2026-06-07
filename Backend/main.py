@@ -4,8 +4,12 @@ from fastapi.middleware.cors import (
     CORSMiddleware
 )
 
+from api.routes.knowledge_graph import (
+    router as knowledge_graph_router,
+)
+
 from api.routes.projects import (
-    router
+    router as projects_router,
 )
 
 app = FastAPI()
@@ -22,7 +26,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router)
+app.include_router(projects_router)
+
+app.include_router(knowledge_graph_router)
 
 
 @app.get("/health")

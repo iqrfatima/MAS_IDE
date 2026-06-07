@@ -39,44 +39,37 @@
 // }
 
 // export default App;
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import Navbar
-  from "./components/layout/Navbar";
+import Navbar from "./components/layout/Navbar";
 
-import Explorer
-  from "./components/explorer/explorer";
+import Explorer from "./components/explorer/Explorer";
 
-import ChatPanel
-  from "./components/chat/ChatPanel";
+import ChatPanel from "./components/chat/ChatPanel";
 
-import LogsPanel
-  from "./components/logs/LogsPanel";
+import LogsPanel from "./components/logs/LogsPanel";
 
-import {
-  getProjects
-} from "./services/api/projects";
+import GraphExplorer from "./components/graph/GraphExplorer";
 
-import {
-  useProjectStore
-} from "./store/projectStore";
+import { getProjects } from "./services/api/projects";
+
+import { useProjectStore } from "./store/projectStore";
+
+type AppView = "generator" | "graph";
 
 function App() {
 
-  const {
-    setProjects
-  } = useProjectStore();
+  const [activeView, setActiveView] =
+    useState<AppView>("generator");
 
-  const loadProjects =
-    async () => {
+  const { setProjects } = useProjectStore();
 
-      const data =
-        await getProjects();
+  const loadProjects = async () => {
 
-      setProjects(
-        data.projects
-      );
-    };
+    const data = await getProjects();
+
+    setProjects(data.projects);
+  };
 
   useEffect(() => {
     loadProjects();
@@ -85,17 +78,24 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-zinc-950">
 
-      <Navbar />
+      <Navbar
+        activeView={activeView}
+        onViewChange={setActiveView}
+      />
 
-      <div className="flex flex-1 overflow-hidden">
+      {activeView === "generator" ? (
+        <div className="flex flex-1 overflow-hidden">
 
-        <Explorer />
+          <Explorer />
 
-        <ChatPanel />
+          <ChatPanel />
 
-        <LogsPanel />
+          <LogsPanel />
 
-      </div>
+        </div>
+      ) : (
+        <GraphExplorer />
+      )}
 
     </div>
   );

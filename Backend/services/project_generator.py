@@ -1,5 +1,9 @@
 from pathlib import Path
 
+from services.knowledge_graph import (
+    get_graph_service,
+)
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -71,13 +75,34 @@ console.log("AI Project Running");
             file["content"]
         )
 
+    file_names = [
+        file["name"]
+        for file in files
+    ]
+
+    graph = get_graph_service()
+
+    graph_result = graph.link_project_files(
+        project_name,
+        file_names,
+        str(project_path),
+    )
+
+    project_node = graph_result["project_node"]
+
     return {
         "project_name": project_name,
         "files": [
             {
-                "name": file["name"]
+                "name": name
             }
 
-            for file in files
-        ]
+            for name in file_names
+        ],
+        "knowledge_graph_node_id":
+            project_node["id"],
+        "knowledge_graph_file_node_ids": [
+            node["id"]
+            for node in graph_result["file_nodes"]
+        ],
     }
