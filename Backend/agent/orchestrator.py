@@ -87,48 +87,31 @@ def format_retrieved_context(data: dict) -> str:
     return "\n\n".join(parts)
 
 def run_masai_analysis(project_path: str) -> bool:
-    import subprocess
-    import os
+    import urllib.request
+    import urllib.error
+    import json
     from pathlib import Path
     
-    masai_dir = (Path(__file__).parent.parent.parent.parent / "masai -kg - Copy (2)").resolve()
+    url = "http://127.0.0.1:8001/build"
     abs_project_path = str(Path(project_path).resolve())
     
-    cmd = ["npm", "run", "dev", "--", abs_project_path]
-    use_shell = os.name == 'nt'
-    
+    req = urllib.request.Request(
+        url,
+        data=json.dumps({"project_path": abs_project_path}).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST"
+    )
     try:
-        print(f"Running MASAI analysis in {masai_dir} on project path {abs_project_path}")
-        result = subprocess.run(
-            cmd,
-            cwd=str(masai_dir),
-            capture_output=True,
-            text=True,
-            shell=use_shell
-        )
-        if result.returncode == 0:
-            print("MASAI analysis completed successfully.")
-            return True
-        else:
-            print(f"MASAI analysis failed with exit code {result.returncode}. Stderr: {result.stderr}")
-            fallback_cmd = ["npx", "tsx", "src/index.ts", abs_project_path]
-            print(f"Retrying with fallback command: {' '.join(fallback_cmd)}")
-            fallback_result = subprocess.run(
-                fallback_cmd,
-                cwd=str(masai_dir),
-                capture_output=True,
-                text=True,
-                shell=use_shell
-            )
-            if fallback_result.returncode == 0:
-                print("MASAI fallback analysis completed successfully.")
+        print(f"Sending MASAI build HTTP request for project: {abs_project_path}")
+        with urllib.request.urlopen(req, timeout=30) as response:
+            if response.status == 200:
+                res_data = json.loads(response.read().decode("utf-8"))
+                print(f"MASAI build response: {res_data}")
                 return True
-            else:
-                print(f"MASAI fallback analysis failed. Stderr: {fallback_result.stderr}")
-                return False
     except Exception as e:
-        print(f"Exception running MASAI analysis: {e}")
-        return False
+        print(f"Error calling MASAI build service: {e}")
+    return False
+
 
 
 AGENT_REGISTRY = {

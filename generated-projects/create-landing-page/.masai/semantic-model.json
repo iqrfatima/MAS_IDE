@@ -39,15 +39,60 @@
       "exported": false,
       "visibility": "public",
       "metadata": {}
+    },
+    {
+      "id": "index.html::index.html",
+      "kind": "file",
+      "name": "index.html",
+      "qualifiedName": "index.html",
+      "filePath": "index.html",
+      "range": {
+        "start": {
+          "line": 1,
+          "column": 4
+        },
+        "end": {
+          "line": 11,
+          "column": 4
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
     }
   ],
-  "scopes": [],
-  "containments": [],
+  "scopes": [
+    {
+      "id": "scope:index.html:global:1:4:11:4",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "index.html::index.html",
+      "filePath": "index.html",
+      "range": {
+        "start": {
+          "line": 1,
+          "column": 4
+        },
+        "end": {
+          "line": 11,
+          "column": 4
+        }
+      },
+      "metadata": {}
+    }
+  ],
+  "containments": [
+    {
+      "parentId": "::create-landing-page",
+      "childId": "index.html::index.html",
+      "kind": "owns"
+    }
+  ],
   "resolvedReferences": [],
   "unresolvedReferences": [],
   "diagnostics": [],
   "projectRoot": "C:/Users/Juveria/Desktop/groupmasai/MAS_IDE/generated-projects/create-landing-page",
-  "createdAt": "2026-06-17T10:23:45.897Z",
-  "fileCount": 0,
-  "symbolCount": 1
+  "createdAt": "2026-06-17T11:32:16.270Z",
+  "fileCount": 1,
+  "symbolCount": 2
 }
