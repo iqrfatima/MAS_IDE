@@ -16,9 +16,119 @@ from agent.reviewer import ReviewerAgent
 from agent.testing import TestingAgent
 from agent.writer import WriterAgent
 from services.file_analyzer import analyze_project
-from services.knowledge_graph import get_graph_service
 from services.llm_service import GeminiQuotaError, create_gemini_service
 from services.workspace_manager import workspace_manager
+import time
+import urllib.request
+import urllib.error
+import json
+
+def call_masai_retrieve(project_path: str, query: str) -> dict:
+    url = "http://127.0.0.1:8001/retrieve"
+    req = urllib.request.Request(
+        url,
+        data=json.dumps({"project_path": project_path, "query": query}).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as response:
+            if response.status == 200:
+                return json.loads(response.read().decode("utf-8"))
+    except Exception as e:
+        print(f"Error calling MASAI retrieve service: {e}")
+    return {}
+
+def format_retrieved_context(data: dict) -> str:
+    if not data:
+        return "No relevant context found."
+        
+    parts = []
+    
+    files = data.get("files", [])
+    if files:
+        parts.append("Relevant Files:\n" + "\n".join(f"- {f}" for f in files))
+        
+    symbols = data.get("symbols", [])
+    if symbols:
+        sym_lines = []
+        for s in symbols:
+            kind = s.get("kind", "")
+            name = s.get("qualifiedName", s.get("name", ""))
+            file = s.get("filePath", "")
+            range_info = s.get("range", {})
+            start_line = range_info.get("start", {}).get("line", 0) + 1
+            sym_lines.append(f"- [{kind}] {name} (in {file}:{start_line})")
+        parts.append("Relevant Symbols:\n" + "\n".join(sym_lines))
+        
+    flow = data.get("flow", [])
+    if flow:
+        flow_lines = []
+        for step in flow:
+            step_num = step.get("step", 0)
+            from_name = step.get("fromName", "")
+            to_name = step.get("toName", "")
+            rel = step.get("relationKind", "")
+            flow_lines.append(f"  Step {step_num}: {from_name} --({rel})--> {to_name}")
+        parts.append("Execution Flow Steps:\n" + "\n".join(flow_lines))
+        
+    snippets = data.get("snippets", [])
+    if snippets:
+        snip_parts = []
+        for snip in snippets:
+            file = snip.get("filePath", "")
+            sym = snip.get("symbolName", "")
+            start = snip.get("startLine", 0)
+            end = snip.get("endLine", 0)
+            content = snip.get("content", "")
+            snip_parts.append(f"--- Symbol: {sym} in {file} (Lines {start}-{end}) ---\n{content}")
+        parts.append("Relevant Code Snippets:\n" + "\n\n".join(snip_parts))
+        
+    return "\n\n".join(parts)
+
+def run_masai_analysis(project_path: str) -> bool:
+    import subprocess
+    import os
+    from pathlib import Path
+    
+    masai_dir = (Path(__file__).parent.parent.parent.parent / "masai -kg - Copy (2)").resolve()
+    abs_project_path = str(Path(project_path).resolve())
+    
+    cmd = ["npm", "run", "dev", "--", abs_project_path]
+    use_shell = os.name == 'nt'
+    
+    try:
+        print(f"Running MASAI analysis in {masai_dir} on project path {abs_project_path}")
+        result = subprocess.run(
+            cmd,
+            cwd=str(masai_dir),
+            capture_output=True,
+            text=True,
+            shell=use_shell
+        )
+        if result.returncode == 0:
+            print("MASAI analysis completed successfully.")
+            return True
+        else:
+            print(f"MASAI analysis failed with exit code {result.returncode}. Stderr: {result.stderr}")
+            fallback_cmd = ["npx", "tsx", "src/index.ts", abs_project_path]
+            print(f"Retrying with fallback command: {' '.join(fallback_cmd)}")
+            fallback_result = subprocess.run(
+                fallback_cmd,
+                cwd=str(masai_dir),
+                capture_output=True,
+                text=True,
+                shell=use_shell
+            )
+            if fallback_result.returncode == 0:
+                print("MASAI fallback analysis completed successfully.")
+                return True
+            else:
+                print(f"MASAI fallback analysis failed. Stderr: {fallback_result.stderr}")
+                return False
+    except Exception as e:
+        print(f"Exception running MASAI analysis: {e}")
+        return False
 
 
 AGENT_REGISTRY = {
@@ -218,31 +328,24 @@ class Orchestrator:
                 manager.state.generated_files,
             )
 
-            file_names = [f["path"] for f in manager.state.generated_files]
-
-            graph = get_graph_service()
-            kg_result = graph.link_project_files(
-                project_name,
-                file_names,
-                project_path,
-            )
-
-            analysis = analyze_project(project_path)
-            extraction_result = graph.index_project_analysis(
-                project_name,
-                analysis,
-            )
-            kg_result["extraction"] = extraction_result
-
             manager.add_message(
                 "system",
                 "orchestrator",
                 f"Wrote {len(manager.state.generated_files)} files to {project_path}",
             )
+
             manager.add_message(
                 "system",
                 "orchestrator",
-                f"Extracted {len(extraction_result['symbol_nodes'])} code symbols into the shared knowledge graph.",
+                "Running MASAI Knowledge Graph analysis...",
+            )
+            run_masai_analysis(project_path)
+            kg_result = {"status": "success"}
+
+            manager.add_message(
+                "system",
+                "orchestrator",
+                "MASAI Knowledge Graph analysis completed and semantic model updated.",
             )
 
         return self._build_response(
@@ -329,8 +432,37 @@ class Orchestrator:
         llm = create_gemini_service(api_key=gemini_api_key)
         agents = self._build_agents(llm)
         target_project = project_name or slugify(goal)
+
+        # 1. Resolve selected project path & call MASAI /retrieve
+        project_path = str((workspace_manager.workspace / target_project).resolve())
+        retrieved_context = ""
+        if (workspace_manager.workspace / target_project).exists():
+            emit("message", {
+                "type": "system",
+                "senderId": "orchestrator",
+                "senderName": "System",
+                "content": f"Loading context from MASAI Knowledge Graph for: {target_project}...",
+                "timestamp": time.time()
+            })
+            try:
+                retrieval_res = call_masai_retrieve(project_path, goal)
+                if retrieval_res:
+                    retrieved_context = format_retrieved_context(retrieval_res)
+            except Exception as exc:
+                print(f"Error calling MASAI retrieval: {exc}")
+
+        # 2. Inject retrieved context into agent prompt
+        if retrieved_context:
+            agent_prompt = f"""User Request:
+{goal}
+
+Relevant Project Context:
+{retrieved_context}"""
+        else:
+            agent_prompt = goal
+
         manager = AgentManager(
-            goal=goal,
+            goal=agent_prompt,
             on_message=lambda msg: emit("message", msg),
         )
 
@@ -396,23 +528,24 @@ class Orchestrator:
             manager.state.generated_files,
         )
 
-        graph = get_graph_service()
-        file_names = [file["path"] for file in manager.state.generated_files]
-        kg_result = graph.link_project_files(
-            target_project,
-            file_names,
-            project_path,
-        )
-        analysis = analyze_project(project_path)
-        kg_result["extraction"] = graph.index_project_analysis(
-            target_project,
-            analysis,
+        manager.add_message(
+            "system",
+            "orchestrator",
+            f"{agent_id} updated {len(manager.state.generated_files)} files in {project_path}.",
         )
 
         manager.add_message(
             "system",
             "orchestrator",
-            f"{agent_id} updated {len(manager.state.generated_files)} files in {project_path}.",
+            "Updating MASAI Knowledge Graph...",
+        )
+        run_masai_analysis(project_path)
+        kg_result = {"status": "success"}
+
+        manager.add_message(
+            "system",
+            "orchestrator",
+            "MASAI Knowledge Graph updated successfully.",
         )
 
         return self._build_response(

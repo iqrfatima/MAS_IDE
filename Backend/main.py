@@ -61,10 +61,6 @@ from api.routes.projects import (
     router as projects_router
 )
 
-from api.routes.knowledge_graph import (
-    router as knowledge_graph_router
-)
-
 from api.routes.agents import (
     router as agents_router
 )
@@ -80,7 +76,6 @@ app.add_middleware(
 )
 
 app.include_router(projects_router)
-app.include_router(knowledge_graph_router)
 app.include_router(agents_router)
 
 @app.get("/health")
