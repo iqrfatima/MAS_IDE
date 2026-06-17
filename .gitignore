@@ -1,3 +1,18 @@
 Backend/data/
 Backend/**/*.db
 .aider*
+
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+
+# Byte-compiled / optimized / DLL files
+*.so
+*.egg-info/

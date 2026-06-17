@@ -1,7 +1,7 @@
 
 from pathlib import Path
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from api.schemas.prompt import PromptRequest
 from agent.orchestrator import orchestrator
@@ -17,6 +17,25 @@ async def generate(data: PromptRequest):
     )
 
     return result
+
+
+@router.get("/projects/{project_name}/semantic-model")
+def get_semantic_model(project_name: str):
+    import json
+    model_path = Path("../generated-projects") / project_name / ".masai" / "semantic-model.json"
+    if not model_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail=f"Semantic model not found for project '{project_name}'"
+        )
+    try:
+        with open(model_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error reading semantic model: {str(e)}"
+        )
 
 
 @router.get("/projects")

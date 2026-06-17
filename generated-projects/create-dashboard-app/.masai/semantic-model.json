@@ -1,0 +1,53 @@
+{
+  "project": {
+    "id": "::create-dashboard-app",
+    "kind": "project",
+    "name": "create-dashboard-app",
+    "qualifiedName": "create-dashboard-app",
+    "filePath": "",
+    "range": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 0,
+        "column": 0
+      }
+    },
+    "exported": false,
+    "visibility": "public",
+    "metadata": {}
+  },
+  "symbols": [
+    {
+      "id": "::create-dashboard-app",
+      "kind": "project",
+      "name": "create-dashboard-app",
+      "qualifiedName": "create-dashboard-app",
+      "filePath": "",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 0,
+          "column": 0
+        }
+      },
+      "exported": false,
+      "visibility": "public",
+      "metadata": {}
+    }
+  ],
+  "scopes": [],
+  "containments": [],
+  "resolvedReferences": [],
+  "unresolvedReferences": [],
+  "diagnostics": [],
+  "projectRoot": "C:/Users/Juveria/Desktop/groupmasai/MAS_IDE/generated-projects/create-dashboard-app",
+  "createdAt": "2026-06-17T10:23:37.687Z",
+  "fileCount": 0,
+  "symbolCount": 1
+}

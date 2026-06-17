@@ -1,0 +1,111 @@
+{
+  "project": {
+    "id": "::create-a-crud-app",
+    "kind": "project",
+    "name": "create-a-crud-app",
+    "qualifiedName": "create-a-crud-app",
+    "filePath": "",
+    "range": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 0,
+        "column": 0
+      }
+    },
+    "exported": false,
+    "visibility": "public",
+    "metadata": {}
+  },
+  "symbols": [
+    {
+      "id": "::create-a-crud-app",
+      "kind": "project",
+      "name": "create-a-crud-app",
+      "qualifiedName": "create-a-crud-app",
+      "filePath": "",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 0,
+          "column": 0
+        }
+      },
+      "exported": false,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "app.js::app.js",
+      "kind": "file",
+      "name": "app.js",
+      "qualifiedName": "app.js",
+      "filePath": "app.js",
+      "range": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    }
+  ],
+  "scopes": [
+    {
+      "id": "scope:app.js:global:1:0:2:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "app.js::app.js",
+      "filePath": "app.js",
+      "range": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    }
+  ],
+  "containments": [
+    {
+      "parentId": "::create-a-crud-app",
+      "childId": "app.js::app.js",
+      "kind": "owns"
+    },
+    {
+      "parentId": "external::builtin::console",
+      "childId": "external::builtin::console::log",
+      "kind": "has_member"
+    }
+  ],
+  "resolvedReferences": [
+    {
+      "candidateId": "ref:app.js::app.js:console.log:1:0:1:11",
+      "fromSymbolId": "app.js::app.js",
+      "toSymbolId": "external::builtin::console::log",
+      "kind": "call",
+      "resolutionMethod": "global_fallback"
+    }
+  ],
+  "unresolvedReferences": [],
+  "diagnostics": [],
+  "projectRoot": "C:/Users/Juveria/Desktop/groupmasai/MAS_IDE/generated-projects/create-a-crud-app",
+  "createdAt": "2026-06-17T10:23:27.341Z",
+  "fileCount": 1,
+  "symbolCount": 2
+}

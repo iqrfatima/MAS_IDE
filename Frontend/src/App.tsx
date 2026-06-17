@@ -47,7 +47,7 @@ import Explorer from "./components/explorer/Explorer";
 
 import ChatPanel from "./components/chat/ChatPanel";
 
-import GraphExplorer from "./components/graph/GraphExplorer";
+import SemanticGraphExplorer from "./components/graph/SemanticGraphExplorer";
 
 import { getProjects } from "./services/api/projects";
 
@@ -90,7 +90,7 @@ function App() {
 
         </div>
       ) : (
-        <GraphExplorer />
+        <SemanticGraphExplorer />
       )}
 
     </div>

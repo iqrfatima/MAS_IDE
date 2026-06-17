@@ -52,3 +52,10 @@ export const getProjects = async () => {
 
   return response.data;
 };
+
+export const getProjectSemanticModel = async (projectName: string) => {
+  const response = await axios.get(
+    `${API_BASE_URL}/projects/${projectName}/semantic-model`
+  );
+  return response.data;
+};
