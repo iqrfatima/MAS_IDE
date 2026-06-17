@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" # Map container port 80 to host port 80
+    depends_on:
+      - backend # Frontend depends on backend being up
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Map container port 3000 to host port 3000
+    environment:
+      # IMPORTANT: Replace with strong, secure passwords/secrets in production
+      DATABASE_URL: postgres://user:password@db:5432/habit_tracker_db
+      # Example for JWT Secret, replace with a strong, random string
+      JWT_SECRET: your_super_secret_jwt_key_here
+      NODE_ENV: development # Set to 'production' for production deployments
+    depends_on:
+      - db # Backend depends on the database being up
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13-alpine # Using a stable Alpine-based PostgreSQL image
+    environment:
+      POSTGRES_DB: habit_tracker_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password # IMPORTANT: Replace with a strong password in production
+    volumes:
+      - db-data:/var/lib/postgresql/data # Persist database data
+    networks:
+      - app-network
+
+volumes:
+  db-data: # Define the named volume for database persistence
+
+networks:
+  app-network:
+    driver: bridge # Define a custom bridge network for services to communicate

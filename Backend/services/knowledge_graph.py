@@ -858,6 +858,68 @@ class KnowledgeGraphService:
             properties=properties,
         )
 
+    def upsert_symbol_node(
+        self,
+        symbol: dict[str, Any],
+        project_name: str,
+        file_path: str,
+    ) -> dict[str, Any]:
+
+        symbol_name = symbol.get("name")
+        symbol_type = symbol.get("type", "entity")
+
+        with self._connection() as conn:
+
+            row = conn.execute(
+                """
+                SELECT id
+                FROM nodes
+                WHERE type = ?
+                  AND json_extract(
+                      properties, '$.name'
+                  ) = ?
+                  AND json_extract(
+                      properties, '$.project_name'
+                  ) = ?
+                  AND json_extract(
+                      properties, '$.file_path'
+                  ) = ?
+                """,
+                (
+                    symbol_type,
+                    symbol_name,
+                    project_name,
+                    file_path,
+                ),
+            ).fetchone()
+
+        properties = {
+            "name": symbol_name,
+            "project_name": project_name,
+            "file_path": file_path,
+            "line": symbol.get("line"),
+        }
+
+        for key, value in symbol.items():
+            if key not in {"name", "type", "line"}:
+                properties[key] = value
+
+        label = f"{project_name}/{file_path}:{symbol_name}"
+
+        if row:
+            return self.update_node(
+                row["id"],
+                label=label,
+                node_type=symbol_type,
+                properties=properties,
+            )
+
+        return self.create_node(
+            label=label,
+            node_type=symbol_type,
+            properties=properties,
+        )
+
     def _ensure_edge(
         self,
         source_id: str,
@@ -971,6 +1033,66 @@ class KnowledgeGraphService:
             "file_nodes": file_nodes,
             "contains_edges": contains_edges,
             "dependency_edges": dependency_edges,
+        }
+
+    def index_project_analysis(
+        self,
+        project_name: str,
+        analyses: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+
+        symbol_nodes: list[dict[str, Any]] = []
+        symbol_edges: list[dict[str, Any]] = []
+        analyzed_files: list[str] = []
+
+        for analysis in analyses:
+
+            file_path = analysis.get("path")
+            if not file_path:
+                continue
+
+            file_node = self.upsert_file_node(
+                file_path,
+                project_name,
+                file_path,
+            )
+
+            analyzed_files.append(file_path)
+
+            for symbol in analysis.get("symbols", []):
+                if not symbol.get("name"):
+                    continue
+
+                symbol_node = self.upsert_symbol_node(
+                    symbol,
+                    project_name,
+                    file_path,
+                )
+
+                symbol_nodes.append(symbol_node)
+
+                relationship = (
+                    "imports"
+                    if symbol.get("type") == "import"
+                    else "defines"
+                )
+
+                edge = self._ensure_edge(
+                    file_node["id"],
+                    symbol_node["id"],
+                    relationship,
+                    {
+                        "file_path": file_path,
+                        "parser": analysis.get("parser"),
+                    },
+                )
+
+                symbol_edges.append(edge)
+
+        return {
+            "analyzed_files": analyzed_files,
+            "symbol_nodes": symbol_nodes,
+            "symbol_edges": symbol_edges,
         }
 
 

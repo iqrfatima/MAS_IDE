@@ -47,8 +47,6 @@ import Explorer from "./components/explorer/Explorer";
 
 import ChatPanel from "./components/chat/ChatPanel";
 
-import LogsPanel from "./components/logs/LogsPanel";
-
 import GraphExplorer from "./components/graph/GraphExplorer";
 
 import { getProjects } from "./services/api/projects";
@@ -89,8 +87,6 @@ function App() {
           <Explorer />
 
           <ChatPanel />
-
-          <LogsPanel />
 
         </div>
       ) : (

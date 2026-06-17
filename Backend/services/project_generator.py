@@ -1,108 +1,108 @@
-from pathlib import Path
+# from pathlib import Path
 
-from services.knowledge_graph import (
-    get_graph_service,
-)
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-PROJECTS_DIR = BASE_DIR / "generated-projects"
+# from services.knowledge_graph import (
+#     get_graph_service,
+# )
 
 
-def generate_project(prompt: str):
+# BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-    project_name = (
-        prompt.lower()
-        .replace(" ", "-")
-    )
+# PROJECTS_DIR = BASE_DIR / "generated-projects"
 
-    project_path = (
-        PROJECTS_DIR / project_name
-    )
 
-    project_path.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+# def generate_project(prompt: str):
 
-    files = [
-        {
-            "name": "index.html",
-            "content": f"""
-<!DOCTYPE html>
+#     project_name = (
+#         prompt.lower()
+#         .replace(" ", "-")
+#     )
 
-<html>
+#     project_path = (
+#         PROJECTS_DIR / project_name
+#     )
 
-<head>
-  <title>{prompt}</title>
-</head>
+#     project_path.mkdir(
+#         parents=True,
+#         exist_ok=True
+#     )
 
-<body>
-  <h1>{prompt}</h1>
-</body>
+#     files = [
+#         {
+#             "name": "index.html",
+#             "content": f"""
+# <!DOCTYPE html>
 
-</html>
-"""
-        },
+# <html>
 
-        {
-            "name": "styles.css",
-            "content": """
-body {
-  background: #111;
-  color: white;
-  font-family: Arial;
-}
-"""
-        },
+# <head>
+#   <title>{prompt}</title>
+# </head>
 
-        {
-            "name": "app.js",
-            "content": """
-console.log("AI Project Running");
-"""
-        }
-    ]
+# <body>
+#   <h1>{prompt}</h1>
+# </body>
 
-    for file in files:
+# </html>
+# """
+#         },
 
-        file_path = (
-            project_path / file["name"]
-        )
+#         {
+#             "name": "styles.css",
+#             "content": """
+# body {
+#   background: #111;
+#   color: white;
+#   font-family: Arial;
+# }
+# """
+#         },
 
-        file_path.write_text(
-            file["content"]
-        )
+#         {
+#             "name": "app.js",
+#             "content": """
+# console.log("AI Project Running");
+# """
+#         }
+#     ]
 
-    file_names = [
-        file["name"]
-        for file in files
-    ]
+#     for file in files:
 
-    graph = get_graph_service()
+#         file_path = (
+#             project_path / file["name"]
+#         )
 
-    graph_result = graph.link_project_files(
-        project_name,
-        file_names,
-        str(project_path),
-    )
+#         file_path.write_text(
+#             file["content"]
+#         )
 
-    project_node = graph_result["project_node"]
+#     file_names = [
+#         file["name"]
+#         for file in files
+#     ]
 
-    return {
-        "project_name": project_name,
-        "files": [
-            {
-                "name": name
-            }
+#     graph = get_graph_service()
 
-            for name in file_names
-        ],
-        "knowledge_graph_node_id":
-            project_node["id"],
-        "knowledge_graph_file_node_ids": [
-            node["id"]
-            for node in graph_result["file_nodes"]
-        ],
-    }
+#     graph_result = graph.link_project_files(
+#         project_name,
+#         file_names,
+#         str(project_path),
+#     )
+
+#     project_node = graph_result["project_node"]
+
+#     return {
+#         "project_name": project_name,
+#         "files": [
+#             {
+#                 "name": name
+#             }
+
+#             for name in file_names
+#         ],
+#         "knowledge_graph_node_id":
+#             project_node["id"],
+#         "knowledge_graph_file_node_ids": [
+#             node["id"]
+#             for node in graph_result["file_nodes"]
+#         ],
+#     }

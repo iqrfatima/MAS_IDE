@@ -1,27 +1,22 @@
-from fastapi import APIRouter
 
 from pathlib import Path
 
-from api.schemas.prompt import PromptRequest
+from fastapi import APIRouter
 
-from services.project_generator import (
-    generate_project
-)
+from api.schemas.prompt import PromptRequest
+from agent.orchestrator import orchestrator
 
 router = APIRouter()
 
 
 @router.post("/generate")
-def generate(data: PromptRequest):
+async def generate(data: PromptRequest):
 
-    project = generate_project(
-            data.prompt
-        )
+    result = await orchestrator.run(
+        goal=data.prompt
+    )
 
-    return {
-        "status": "success",
-        "project": project
-    }
+    return result
 
 
 @router.get("/projects")
@@ -39,20 +34,17 @@ def get_projects():
 
                 files = []
 
-                for file in project.iterdir():
+                for file in project.rglob("*"):
 
                     if file.is_file():
 
                         files.append({
-                            "name": file.name
+                            "name": file.relative_to(project).as_posix()
                         })
 
                 projects.append({
-                    "project_name":
-                        project.name,
-
-                    "files":
-                        files
+                    "project_name": project.name,
+                    "files": files
                 })
 
     return {
