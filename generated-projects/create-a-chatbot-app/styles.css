@@ -1,6 +1,5 @@
-
 body {
-  background: #111;
-  color: white;
-  font-family: Arial;
+  background: #f8f9fa; /* Light grey background */
+  color: #212529;    /* Dark grey text */
+  font-family: Arial, sans-serif;
 }

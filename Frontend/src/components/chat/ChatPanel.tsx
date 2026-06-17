@@ -125,7 +125,8 @@ function ChatPanel() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-zinc-950">
+    // <div className="flex-1 flex flex-col bg-zinc-950">
+      <div className="flex-1 flex flex-col bg-zinc-950 min-h-0">
       <ChatMessages />
       
       <div className="border-t border-zinc-800 p-6 flex flex-col gap-4">
