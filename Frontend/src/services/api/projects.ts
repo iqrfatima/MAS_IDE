@@ -59,3 +59,34 @@ export const getProjectSemanticModel = async (projectName: string) => {
   );
   return response.data;
 };
+// /* NEW */
+// export const readProjectFile = async (
+//   projectName: string,
+//   filePath: string
+// ) => {
+//   const response = await axios.get(
+//     `${API_BASE_URL}/projects/${projectName}/file`,
+//     {
+//       params: {
+//         path: filePath,
+//       },
+//     }
+//   );
+
+//   return response.data;
+// };
+export const readFile = async (
+  projectName: string,
+  path: string
+) => {
+  const response = await axios.get(
+    `${API_BASE_URL}/projects/${projectName}/file`,
+    {
+      params: {
+        path,
+      },
+    }
+  );
+
+  return response.data;
+};

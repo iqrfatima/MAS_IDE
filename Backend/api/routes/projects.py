@@ -69,3 +69,31 @@ def get_projects():
     return {
         "projects": projects
     }
+    
+# NEW ROUTE
+@router.get("/projects/{project_name}/file")
+def read_file(
+    project_name: str,
+    path: str
+):
+
+    file_path = (
+        Path("../generated-projects")
+        / project_name
+        / path
+    )
+
+    if not file_path.exists():
+
+        raise HTTPException(
+            status_code=404,
+            detail="File not found"
+        )
+
+    return {
+        "path": path,
+        "content": file_path.read_text(
+            encoding="utf-8",
+            errors="ignore"
+        )
+    }

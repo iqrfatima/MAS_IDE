@@ -52,6 +52,7 @@ import SemanticGraphExplorer from "./components/graph/SemanticGraphExplorer";
 import { getProjects } from "./services/api/projects";
 
 import { useProjectStore } from "./store/projectStore";
+import EditorPanel from "./components/editor/EditorPanel";
 
 type AppView = "generator" | "graph";
 
@@ -87,6 +88,8 @@ function App() {
           <Explorer />
 
           <ChatPanel />
+
+          <EditorPanel/>
 
         </div>
       ) : (
