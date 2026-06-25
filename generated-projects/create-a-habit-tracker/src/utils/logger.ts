@@ -1,0 +1,1 @@
+export const logger = {\n  info: (msg: string, ...args: any[]) => console.info(`[INFO] ${msg}`, ...args),\n  warn: (msg: string, ...args: any[]) => console.warn(`[WARN] ${msg}`, ...args),\n  error: (msg: string, ...args: any[]) => console.error(`[ERROR] ${msg}`, ...args),\n};

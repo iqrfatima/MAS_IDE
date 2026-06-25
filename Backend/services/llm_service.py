@@ -12,6 +12,10 @@ from google import genai
 QUOTA_ERROR_KEYWORDS = (
     "429",
     "425",
+    "503",
+    "unavailable",
+    "service unavailable",
+    "high demand",
     "quota",
     "rate limit",
     "rate_limit",
@@ -69,7 +73,8 @@ class GeminiService:
             model=self.model,
             contents=prompt,
         )
-
+    
+# 
     def _parse_response(self, text: str) -> dict:
         cleaned = (
             text.replace("```json", "")

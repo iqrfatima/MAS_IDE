@@ -2,7 +2,8 @@
 
 import asyncio
 from typing import Any, AsyncGenerator, Callable, Optional
-
+import subprocess
+from pathlib import Path
 from agent.agent_manager import AgentManager, slugify
 from agent.architect import ArchitectAgent
 from agent.backend import BackendAgent
@@ -16,7 +17,8 @@ from agent.reviewer import ReviewerAgent
 from agent.testing import TestingAgent
 from agent.writer import WriterAgent
 from services.file_analyzer import analyze_project
-from services.llm_service import GeminiQuotaError, create_gemini_service
+from services.llm_service import GeminiQuotaError
+from services.hybrid_llm_service import create_hybrid_llm_service
 from services.workspace_manager import workspace_manager
 import time
 import urllib.request
@@ -39,53 +41,123 @@ def call_masai_retrieve(project_path: str, query: str) -> dict:
         print(f"Error calling MASAI retrieve service: {e}")
     return {}
 
+# def format_retrieved_context(data: dict) -> str:
+#     if not data:
+#         return "No relevant context found."
+        
+#     parts = []
+    
+#     files = data.get("files", [])
+#     if files:
+#         parts.append("Relevant Files:\n" + "\n".join(f"- {f}" for f in files))
+        
+#     symbols = data.get("symbols", [])
+#     if symbols:
+#         sym_lines = []
+#         for s in symbols:
+#             kind = s.get("kind", "")
+#             name = s.get("qualifiedName", s.get("name", ""))
+#             file = s.get("filePath", "")
+#             range_info = s.get("range", {})
+#             start_line = range_info.get("start", {}).get("line", 0) + 1
+#             sym_lines.append(f"- [{kind}] {name} (in {file}:{start_line})")
+#         parts.append("Relevant Symbols:\n" + "\n".join(sym_lines))
+        
+#     flow = data.get("flow", [])
+#     if flow:
+#         flow_lines = []
+#         for step in flow:
+#             step_num = step.get("step", 0)
+#             from_name = step.get("fromName", "")
+#             to_name = step.get("toName", "")
+#             rel = step.get("relationKind", "")
+#             flow_lines.append(f"  Step {step_num}: {from_name} --({rel})--> {to_name}")
+#         parts.append("Execution Flow Steps:\n" + "\n".join(flow_lines))
+        
+#     snippets = data.get("snippets", [])
+#     if snippets:
+#         snip_parts = []
+#         for snip in snippets:
+#             file = snip.get("filePath", "")
+#             sym = snip.get("symbolName", "")
+#             start = snip.get("startLine", 0)
+#             end = snip.get("endLine", 0)
+#             content = snip.get("content", "")
+#             snip_parts.append(f"--- Symbol: {sym} in {file} (Lines {start}-{end}) ---\n{content}")
+#         parts.append("Relevant Code Snippets:\n" + "\n\n".join(snip_parts))
+        
+#     return "\n\n".join(parts)
+#
 def format_retrieved_context(data: dict) -> str:
     if not data:
         return "No relevant context found."
-        
+
     parts = []
-    
-    files = data.get("files", [])
+
+    files = data.get("files", [])[:10]
     if files:
-        parts.append("Relevant Files:\n" + "\n".join(f"- {f}" for f in files))
-        
-    symbols = data.get("symbols", [])
+        parts.append(
+            "Relevant Files:\n"
+            + "\n".join(f"- {f}" for f in files)
+        )
+
+    symbols = data.get("symbols", [])[:20]
     if symbols:
         sym_lines = []
+
         for s in symbols:
             kind = s.get("kind", "")
-            name = s.get("qualifiedName", s.get("name", ""))
+            name = s.get(
+                "qualifiedName",
+                s.get("name", "")
+            )
             file = s.get("filePath", "")
-            range_info = s.get("range", {})
-            start_line = range_info.get("start", {}).get("line", 0) + 1
-            sym_lines.append(f"- [{kind}] {name} (in {file}:{start_line})")
-        parts.append("Relevant Symbols:\n" + "\n".join(sym_lines))
-        
-    flow = data.get("flow", [])
+
+            range_info = s.get(
+                "range",
+                {}
+            )
+
+            start_line = (
+                range_info.get(
+                    "start",
+                    {}
+                ).get(
+                    "line",
+                    0
+                ) + 1
+            )
+
+            sym_lines.append(
+                f"- [{kind}] {name} "
+                f"(in {file}:{start_line})"
+            )
+
+        parts.append(
+            "Relevant Symbols:\n"
+            + "\n".join(sym_lines)
+        )
+
+    flow = data.get("flow", [])[:15]
+
     if flow:
         flow_lines = []
-        for step in flow:
-            step_num = step.get("step", 0)
-            from_name = step.get("fromName", "")
-            to_name = step.get("toName", "")
-            rel = step.get("relationKind", "")
-            flow_lines.append(f"  Step {step_num}: {from_name} --({rel})--> {to_name}")
-        parts.append("Execution Flow Steps:\n" + "\n".join(flow_lines))
-        
-    snippets = data.get("snippets", [])
-    if snippets:
-        snip_parts = []
-        for snip in snippets:
-            file = snip.get("filePath", "")
-            sym = snip.get("symbolName", "")
-            start = snip.get("startLine", 0)
-            end = snip.get("endLine", 0)
-            content = snip.get("content", "")
-            snip_parts.append(f"--- Symbol: {sym} in {file} (Lines {start}-{end}) ---\n{content}")
-        parts.append("Relevant Code Snippets:\n" + "\n\n".join(snip_parts))
-        
-    return "\n\n".join(parts)
 
+        for step in flow:
+            flow_lines.append(
+                f"Step {step.get('step',0)}: "
+                f"{step.get('fromName','')} "
+                f"--({step.get('relationKind','')})--> "
+                f"{step.get('toName','')}"
+            )
+
+        parts.append(
+            "Execution Flow Steps:\n"
+            + "\n".join(flow_lines)
+        )
+
+    return "\n\n".join(parts)
+#
 def run_masai_analysis(project_path: str) -> bool:
     import subprocess
     import os
@@ -130,6 +202,50 @@ def run_masai_analysis(project_path: str) -> bool:
         print(f"Exception running MASAI analysis: {e}")
         return False
 
+# 
+def validate_project(project_path: str) -> dict:
+    project = Path(project_path)
+
+    try:
+        # React / Vite
+        if (project / "package.json").exists():
+
+            result = subprocess.run(
+                ["npm", "run", "build"],
+                cwd=project_path,
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+
+            return {
+                "success": result.returncode == 0,
+                "output": result.stdout,
+                "error": result.stderr,
+            }
+
+        # Python
+        result = subprocess.run(
+            ["python", "-m", "compileall", "."],
+            cwd=project_path,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+
+        return {
+            "success": result.returncode == 0,
+            "output": result.stdout,
+            "error": result.stderr,
+        }
+
+    except Exception as exc:
+        return {
+            "success": False,
+            "error": str(exc),
+            "output": "",
+        }
+# 
 
 AGENT_REGISTRY = {
     "planner": PlannerAgent,
@@ -179,23 +295,40 @@ PARALLEL_SPECIALISTS = [
     }),
 ]
 
+# FINALIZATION_PIPELINE = [
+#     ("devops", DevOpsAgent, {
+#         "title": "CI/CD Validation Setup",
+#         "description": "Create Docker, CI/CD workflows, environment configuration, and validation commands",
+#         "filename": "Dockerfile",
+#     }),
+#     ("reviewer", ReviewerAgent, {
+#         "title": "Review Agent",
+#         "description": "Review generated code, architecture, tests, security, accessibility, and deployability",
+#     }),
+#     ("merge", CodeMergeAgent, {
+#         "title": "Code Merge Agent",
+#         "description": "Resolve conflicts and finalize the generated file set",
+#     }),
+#     ("qa", QAAgent, {
+#         "title": "Final CI/CD Validation",
+#         "description": "Validate the final merged project and list production readiness checks",
+#     }),
+#     ("writer", WriterAgent, {
+#         "title": "Documentation",
+#         "description": "Write README, API docs, setup, deployment, and validation instructions",
+#         "filename": "README.md",
+#     }),
+# ]
+# 
 FINALIZATION_PIPELINE = [
     ("devops", DevOpsAgent, {
         "title": "CI/CD Validation Setup",
         "description": "Create Docker, CI/CD workflows, environment configuration, and validation commands",
         "filename": "Dockerfile",
     }),
-    ("reviewer", ReviewerAgent, {
-        "title": "Review Agent",
-        "description": "Review generated code, architecture, tests, security, accessibility, and deployability",
-    }),
     ("merge", CodeMergeAgent, {
         "title": "Code Merge Agent",
         "description": "Resolve conflicts and finalize the generated file set",
-    }),
-    ("qa", QAAgent, {
-        "title": "Final CI/CD Validation",
-        "description": "Validate the final merged project and list production readiness checks",
     }),
     ("writer", WriterAgent, {
         "title": "Documentation",
@@ -203,7 +336,7 @@ FINALIZATION_PIPELINE = [
         "filename": "README.md",
     }),
 ]
-
+# 
 
 class Orchestrator:
 
@@ -232,6 +365,22 @@ class Orchestrator:
             "agentId": agent_id,
             "task": task.get("title", ""),
         })
+        # # to wrap every agent call, one agent failing won't instantly kill the whole MAS run.
+        # try:
+        #     result = await agents[agent_id].execute(task, manager)
+
+        # except GeminiQuotaError as exc:
+
+        #     manager.add_message(
+        #         "warning",
+        #         "system",
+        #         f"{agent_id} temporarily unavailable: {exc}"
+        #     )
+
+        #     return agent_id, {
+        #         "status": "failed",
+        #         "error": str(exc)
+        #     }
 
         return agent_id, result
 
@@ -241,10 +390,17 @@ class Orchestrator:
         gemini_api_key: Optional[str],
         emit: Callable[[str, dict[str, Any]], None],
     ) -> dict[str, Any]:
-        llm = create_gemini_service(api_key=gemini_api_key)
         manager = AgentManager(
             goal=goal,
             on_message=lambda msg: emit("message", msg),
+        )
+        llm = create_hybrid_llm_service(
+            gemini_api_key=gemini_api_key,
+            on_fallback=lambda agent_id: manager.add_message(
+                "warning",
+                "system",
+                f"Gemini quota exceeded — **{agent_id}** is using OpenRouter instead.",
+            ),
         )
         agents = self._build_agents(llm)
         results: dict[str, Any] = {}
@@ -322,27 +478,92 @@ class Orchestrator:
         project_path = None
         kg_result = None
 
+        # if manager.state.generated_files:
+        #     project_path = workspace_manager.write_files(
+        #         project_name,
+        #         manager.state.generated_files,
+        #     )
+
+        #     manager.add_message(
+        #         "system",
+        #         "orchestrator",
+        #         f"Wrote {len(manager.state.generated_files)} files to {project_path}",
+        #     )
+        ###
         if manager.state.generated_files:
             project_path = workspace_manager.write_files(
-                project_name,
-                manager.state.generated_files,
-            )
+            project_name,
+            manager.state.generated_files,
+        )
 
+        manager.add_message(
+            "system",
+            "orchestrator",
+            f"Wrote {len(manager.state.generated_files)} files to {project_path}",
+        )
+
+        # ==========================================
+         # LOCAL VALIDATION
+        # ==========================================
+        validation = validate_project(project_path)
+
+        if validation["success"]:
             manager.add_message(
                 "system",
                 "orchestrator",
-                f"Wrote {len(manager.state.generated_files)} files to {project_path}",
+                "Local validation passed successfully.",
             )
-
+        else:
             manager.add_message(
                 "system",
                 "orchestrator",
-                "Running MASAI Knowledge Graph analysis...",
+                "Local validation failed. Launching Reviewer and QA agents...",
             )
-            run_masai_analysis(project_path)
-            kg_result = {"status": "success"}
 
-            manager.add_message(
+        error_text = validation.get("error", "")[:8000]
+
+        for agent_id in ["reviewer", "qa"]:
+            task = {
+                "title": "Fix Validation Errors",
+                "description": f"""
+                    Fix these build/compile errors:
+
+                {error_text}
+                """,
+            }
+
+            completed_id, result = await self._execute_agent_task(
+                agent_id,
+                task,
+                agents,
+                manager,
+                emit,
+            )
+
+            results[completed_id] = result
+
+        # Rewrite fixed files
+        project_path = workspace_manager.write_files(
+            project_name,
+            manager.state.generated_files,
+        )
+
+        manager.add_message(
+            "system",
+            "orchestrator",
+            "Reviewer/QA fixes applied and files rewritten.",
+        )
+        ###
+        manager.add_message(
+            "system",
+            "orchestrator",
+              "Running MASAI Knowledge Graph analysis...",
+        )
+           
+        run_masai_analysis(project_path)
+        kg_result = {"status": "success"}
+
+        manager.add_message(
                 "system",
                 "orchestrator",
                 "MASAI Knowledge Graph analysis completed and semantic model updated.",
@@ -429,8 +650,6 @@ class Orchestrator:
         if agent_id not in AGENT_REGISTRY:
             raise ValueError(f"Unknown agent '{agent_id}'")
 
-        llm = create_gemini_service(api_key=gemini_api_key)
-        agents = self._build_agents(llm)
         target_project = project_name or slugify(goal)
 
         # 1. Resolve selected project path & call MASAI /retrieve
@@ -465,6 +684,15 @@ Relevant Project Context:
             goal=agent_prompt,
             on_message=lambda msg: emit("message", msg),
         )
+        llm = create_hybrid_llm_service(
+            gemini_api_key=gemini_api_key,
+            on_fallback=lambda aid: manager.add_message(
+                "warning",
+                "system",
+                f"Gemini quota exceeded — **{aid}** is using OpenRouter instead.",
+            ),
+        )
+        agents = self._build_agents(llm)
 
         existing_files = workspace_manager.read_project_files(target_project)
         manager.add_message(
@@ -473,22 +701,35 @@ Relevant Project Context:
             f"Routing direct request to {agent_id} agent for project '{target_project}'.",
         )
 
+        # if existing_files:
+        #     manager.state.generated_files.extend(existing_files)
+        #     file_snapshot = "\n\n".join(
+        #         f"FILE: {file['path']}\n{file['content'][:6000]}"
+        #         for file in existing_files[:12]
+        #     )
+        #     manager.add_message(
+        #         "system",
+        #         "orchestrator",
+        #         f"Loaded {len(existing_files)} existing files as context for targeted changes.",
+        #     )
+        #     manager.add_message(
+        #         "system",
+        #         "orchestrator",
+        #         f"Existing project snapshot:\n{file_snapshot}",
+        #     )
+        #
         if existing_files:
-            manager.state.generated_files.extend(existing_files)
-            file_snapshot = "\n\n".join(
-                f"FILE: {file['path']}\n{file['content'][:6000]}"
-                for file in existing_files[:12]
+            manager.state.generated_files.extend(
+                existing_files
             )
-            manager.add_message(
-                "system",
-                "orchestrator",
-                f"Loaded {len(existing_files)} existing files as context for targeted changes.",
-            )
-            manager.add_message(
-                "system",
-                "orchestrator",
-                f"Existing project snapshot:\n{file_snapshot}",
-            )
+
+        manager.add_message(
+            "system",
+            "orchestrator",
+            f"Loaded {len(existing_files)} project files.",
+        )
+        
+        # 
 
         task = {
             "title": f"Direct {agent_id.title()} Change",

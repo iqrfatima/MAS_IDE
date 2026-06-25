@@ -1,0 +1,1 @@
+import React from 'react';\nimport HabitList from '../components/HabitList';\n\nconst Dashboard: React.FC = () => {\n  return (\n    <div>\n      <HabitList />\n    </div>\n  );\n};\n\nexport default Dashboard;

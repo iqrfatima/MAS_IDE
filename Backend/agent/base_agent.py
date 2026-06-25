@@ -40,7 +40,10 @@ class BaseAgent(ABC):
         if role_extra:
             prompt = f"{context}\n\nROLE-SPECIFIC GUIDANCE:\n{role_extra}"
 
-        result = await self.llm.generate_json(prompt)
+        result = await self.llm.generate_json(
+            prompt,
+            self.agent_id,
+        )
 
         manager.record_agent_result(
             self.agent_id,
@@ -50,3 +53,4 @@ class BaseAgent(ABC):
         )
 
         return result
+

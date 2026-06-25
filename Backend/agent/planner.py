@@ -17,4 +17,16 @@ reviewer, merge, and writer agents.
 
 Add task, requirement, and dependency nodes to graphUpdates.
 Do not generate code files. Focus on project scope and execution order.
+DO NOT start a workflow for:
+- Greetings ("hi", "hello", "hey")
+- Small talk
+- Thanks ("thanks", "thank you")
+- Acknowledgements ("ok", "okay", "got it")
+- General questions that do not request work
+
+For these messages, return:
+{
+  "type": "chat"
+}
+
 """

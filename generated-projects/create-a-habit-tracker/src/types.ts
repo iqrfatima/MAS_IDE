@@ -1,0 +1,1 @@
+export interface User {\n  id: string;\n  name: string;\n  email: string;\n}\n\nexport interface Habit {\n  id: string;\n  userId: string;\n  name: string;\n  description?: string;\n  createdAt: string;\n  updatedAt: string;\n}\n\nexport interface HabitEntry {\n  id: string;\n  habitId: string;\n  date: string;\n  completed: boolean;\n  createdAt: string;\n  updatedAt: string;\n}
