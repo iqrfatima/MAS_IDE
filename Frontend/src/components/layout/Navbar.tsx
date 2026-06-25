@@ -1,4 +1,4 @@
-type AppView = "generator" | "graph";
+type AppView = "ide" | "graph";
 
 interface NavbarProps {
   activeView: AppView;
@@ -12,45 +12,50 @@ function Navbar({
 
   const tabClass = (view: AppView) =>
     activeView === view
-      ? "bg-zinc-800 text-white"
-      : "text-zinc-400 hover:text-white";
+      ? "px-2 py-0.5 text-on-surface hover:bg-outline/20 rounded-sm transition-colors text-[11px] font-mono bg-outline/15 select-none"
+      : "px-2 py-0.5 text-on-surface-variant hover:text-on-surface hover:bg-outline/20 rounded-sm transition-colors text-[11px] font-mono select-none";
 
   return (
-    <div className="h-14 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-6">
-
-      <div className="flex items-center gap-6">
-
-        <div className="text-white font-semibold">
-          MAS AI IDE
+    <header className="bg-surface-container-low border-b border-outline h-9 flex justify-between items-center px-3 flex-shrink-0 z-50">
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-primary text-[18px]">terminal</span>
+          <span className="font-mono font-bold tracking-tight text-[13px] uppercase select-none">MAS AI IDE</span>
         </div>
-
-        <div className="flex gap-1">
+        <nav className="hidden md:flex items-center gap-1">
           <button
-            onClick={() =>
-              onViewChange("generator")
-            }
-            className={`px-3 py-1.5 rounded-lg text-sm ${tabClass("generator")}`}
+            onClick={() => onViewChange("ide")}
+            className={tabClass("ide")}
           >
-            Generator
+            IDE
           </button>
-
           <button
-            onClick={() =>
-              onViewChange("graph")
-            }
-            className={`px-3 py-1.5 rounded-lg text-sm ${tabClass("graph")}`}
+            onClick={() => onViewChange("graph")}
+            className={tabClass("graph")}
           >
             Knowledge Graph
           </button>
+        </nav>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 px-2 py-0.5 bg-outline/10 border border-outline rounded-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+          <span className="font-mono text-[10px] text-tertiary uppercase tracking-wider select-none">Cluster Active</span>
         </div>
-
+        <div className="flex items-center gap-3">
+          <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-[18px] cursor-pointer">
+            search
+          </button>
+          <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-[18px] cursor-pointer">
+            settings
+          </button>
+          <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-[18px] cursor-pointer">
+            account_circle
+          </button>
+        </div>
       </div>
-
-      <div className="text-zinc-400 text-sm">
-        AI Developer Environment
-      </div>
-
-    </div>
+    </header>
   );
 }
 

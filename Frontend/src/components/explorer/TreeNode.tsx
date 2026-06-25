@@ -1,17 +1,31 @@
 import { useState } from "react";
-import {
-  ChevronRight,
-  ChevronDown,
-  Folder,
-  FolderOpen,
-  File,
-} from "lucide-react";
+import { useProjectStore } from "../../store/projectStore";
 
 interface TreeNodeProps {
   name: string;
   node: any;
   path?: string;
   onFileClick?: (path: string) => void;
+}
+
+function getFileIcon(filename: string): string {
+  const ext = filename.split(".").pop()?.toLowerCase();
+  switch (ext) {
+    case "js":
+    case "jsx":
+      return "javascript";
+    case "ts":
+    case "tsx":
+      return "code";
+    case "css":
+      return "css";
+    case "json":
+      return "data_object";
+    case "md":
+      return "description";
+    default:
+      return "description";
+  }
 }
 
 export default function TreeNode({
@@ -21,24 +35,28 @@ export default function TreeNode({
   onFileClick,
 }: TreeNodeProps) {
   const [open, setOpen] = useState(false);
+  const { activeTab } = useProjectStore();
 
   const isFolder = node !== null;
-
   const currentPath = path ? `${path}/${name}` : name;
+  const isActive = !isFolder && activeTab && activeTab.endsWith(currentPath);
 
   return (
     <div>
       <div
-        className="
-          flex items-center gap-1
-          px-2 py-1
-          text-sm
-          text-zinc-300
-          hover:bg-zinc-800
-          rounded
+        className={`
+          flex items-center gap-1.5
+          px-3 py-0.5
+          text-[12px]
           cursor-pointer
           select-none
-        "
+          transition-colors duration-150
+          ${
+            isActive 
+              ? "bg-outline/20 text-primary border-l border-primary" 
+              : "text-on-surface-variant hover:text-on-surface hover:bg-outline/10"
+          }
+        `}
         onClick={() => {
           if (isFolder) {
             setOpen(!open);
@@ -48,31 +66,20 @@ export default function TreeNode({
         }}
       >
         {isFolder ? (
-          <>
-            {open ? (
-              <ChevronDown size={14} />
-            ) : (
-              <ChevronRight size={14} />
-            )}
-
-            {open ? (
-              <FolderOpen size={14} />
-            ) : (
-              <Folder size={14} />
-            )}
-          </>
+          <span className="material-symbols-outlined text-[14px] text-on-surface-variant/70">
+            {open ? "expand_more" : "chevron_right"}
+          </span>
         ) : (
-          <>
-            <span className="w-[14px]" />
-            <File size={14} />
-          </>
+          <span className={`material-symbols-outlined text-[14px] ${isActive ? 'text-primary' : 'text-on-surface-variant/80'}`}>
+            {getFileIcon(name)}
+          </span>
         )}
 
-        <span className="truncate">{name}</span>
+        <span className="truncate flex-1 font-mono">{name}</span>
       </div>
 
       {open && isFolder && (
-        <div className="ml-4 border-l border-zinc-800">
+        <div className="pl-3 border-l border-outline/25 mt-0.5">
           {Object.entries(node).map(([key, value]) => (
             <TreeNode
               key={key}

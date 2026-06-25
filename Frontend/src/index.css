@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+@theme {
+  --color-surface-container-low: #09090b;
+  --color-on-background: #f4f4f5;
+  --color-primary: #3b82f6;
+  --color-surface-variant: #18181b;
+  --color-tertiary: #4edea3;
+  --color-background: #09090b;
+  --color-outline: rgba(255, 255, 255, 0.08);
+  --color-outline-variant: rgba(255, 255, 255, 0.08);
+  --color-on-surface: #f4f4f5;
+  --color-on-surface-variant: #a1a1aa;
+
+  /* Accent mapping for material colors */
+  --color-tertiary-fixed: #4edea3;
+  --color-surface-bright: #18181b;
+  --color-inverse-primary: #2563eb;
+  --color-surface-container: #18181b;
+  --color-surface-container-high: #18181b;
+  --color-surface-container-lowest: #09090b;
+  --color-surface-container-highest: #27272a;
+  --color-surface-dim: #09090b;
+  --color-primary-fixed: #3b82f6;
+  --color-primary-fixed-dim: #60a5fa;
+  --color-primary-container: #1d4ed8;
+  --color-secondary: #a1a1aa;
+  --color-secondary-container: #18181b;
+  --color-error: #ef4444;
+  --color-error-container: #991b1b;
+  --color-on-error: #ffffff;
+
+  --radius-sm: 0.25rem;
+  --radius-default: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --spacing-margin-desktop: 16px;
+  --spacing-unit: 4px;
+  --spacing-stack-compact: 4px;
+  --spacing-stack-comfortable: 12px;
+  --spacing-margin-mobile: 8px;
+  --spacing-gutter: 8px;
+
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+  --font-code-sm: "JetBrains Mono", monospace;
+  --font-body-lg: "Inter", sans-serif;
+  --font-headline-lg: "JetBrains Mono", monospace;
+  --font-body-md: "Inter", sans-serif;
+  --font-headline-md: "JetBrains Mono", monospace;
+  --font-label-caps: "JetBrains Mono", monospace;
+
+  /* Sleek UI sizes */
+  --text-ui: 12px;
+  --text-ui--line-height: 16px;
+  --text-code-sm: 11px;
+  --text-code-sm--line-height: 16px;
+  --text-body-lg: 14px;
+  --text-body-lg--line-height: 20px;
+  --text-headline-lg: 13px;
+  --text-headline-lg--line-height: 20px;
+  --text-body-md: 12px;
+  --text-body-md--line-height: 16px;
+  --text-headline-md: 14px;
+  --text-headline-md--line-height: 20px;
+  --text-label-caps: 10px;
+  --text-label-caps--line-height: 14px;
+}
+
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #09090b;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #27272a;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #71717a;
+  }
+}
+
+@utility glow-dot {
+  box-shadow: 0 0 3px #10b981;
+}
+
+@utility active-file-indicator {
+  border-left: 1px solid #3b82f6;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+@utility terminal-glow {
+  box-shadow: none;
+}
+
+.material-symbols-outlined {
+  /* Thin weight settings for a highly professional aesthetic */
+  font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 20;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Hide scrollbars for chrome but keep scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Tab Active Styles */
+.active-tab {
+  border-bottom: 1px solid #3b82f6;
+  background: #18181b;
+  color: #f4f4f5;
+}
