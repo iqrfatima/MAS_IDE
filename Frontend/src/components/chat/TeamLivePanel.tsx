@@ -4,6 +4,7 @@ interface TeamLivePanelProps {
   selectedAgent: string;
   setSelectedAgent: (agentId: string) => void;
   onBroadcastClick: () => void;
+  width?: number;
 }
 
 const AGENTS = [
@@ -23,6 +24,7 @@ export default function TeamLivePanel({
   selectedAgent,
   setSelectedAgent,
   onBroadcastClick,
+  width,
 }: TeamLivePanelProps) {
   const { logs, isStreaming } = useProjectStore();
 
@@ -33,7 +35,10 @@ export default function TeamLivePanel({
     .reverse();
 
   return (
-    <aside className="w-[280px] flex-shrink-0 border-l border-outline bg-background flex flex-col h-full select-none">
+    <aside 
+      style={width ? { width: `${width}px` } : undefined}
+      className={`${width ? "w-[280px] flex-shrink-0" : "flex-1 min-w-[200px]"} border-l border-outline bg-background flex flex-col h-full select-none`}
+    >
       {/* Sidebar Header */}
       <div className="px-3 py-2 border-b border-outline flex items-center justify-between flex-shrink-0 bg-surface-container-low">
         <span className="text-[11px] font-bold uppercase tracking-widest opacity-60">Team Control</span>

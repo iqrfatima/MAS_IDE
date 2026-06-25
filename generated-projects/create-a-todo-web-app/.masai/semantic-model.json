@@ -1,0 +1,909 @@
+{
+  "project": {
+    "id": "::create-a-todo-web-app",
+    "kind": "project",
+    "name": "create-a-todo-web-app",
+    "qualifiedName": "create-a-todo-web-app",
+    "filePath": "",
+    "range": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 0,
+        "column": 0
+      }
+    },
+    "exported": false,
+    "visibility": "public",
+    "metadata": {}
+  },
+  "symbols": [
+    {
+      "id": "::create-a-todo-web-app",
+      "kind": "project",
+      "name": "create-a-todo-web-app",
+      "qualifiedName": "create-a-todo-web-app",
+      "filePath": "",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 0,
+          "column": 0
+        }
+      },
+      "exported": false,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "postcss.config.js::postcss.config.js",
+      "kind": "file",
+      "name": "postcss.config.js",
+      "qualifiedName": "postcss.config.js",
+      "filePath": "postcss.config.js",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "src/App.tsx::src/App.tsx",
+      "kind": "file",
+      "name": "src/App.tsx",
+      "qualifiedName": "src/App.tsx",
+      "filePath": "src/App.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "src/App.tsx::App",
+      "kind": "function",
+      "name": "App",
+      "qualifiedName": "App",
+      "filePath": "src/App.tsx",
+      "range": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 1
+        }
+      },
+      "exported": false,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "kind": "file",
+      "name": "src/components/Layout.tsx",
+      "qualifiedName": "src/components/Layout.tsx",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 32,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "src/components/Layout.tsx::Layout",
+      "kind": "variable",
+      "name": "Layout",
+      "qualifiedName": "Layout",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 6
+        },
+        "end": {
+          "line": 29,
+          "column": 1
+        }
+      },
+      "exported": false,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "src/main.tsx::src/main.tsx",
+      "kind": "file",
+      "name": "src/main.tsx",
+      "qualifiedName": "src/main.tsx",
+      "filePath": "src/main.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "src/pages/HomePage.tsx::src/pages/HomePage.tsx",
+      "kind": "file",
+      "name": "src/pages/HomePage.tsx",
+      "qualifiedName": "src/pages/HomePage.tsx",
+      "filePath": "src/pages/HomePage.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 32,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "src/pages/HomePage.tsx::HomePage",
+      "kind": "variable",
+      "name": "HomePage",
+      "qualifiedName": "HomePage",
+      "filePath": "src/pages/HomePage.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 6
+        },
+        "end": {
+          "line": 29,
+          "column": 1
+        }
+      },
+      "exported": false,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "tailwind.config.js::tailwind.config.js",
+      "kind": "file",
+      "name": "tailwind.config.js",
+      "qualifiedName": "tailwind.config.js",
+      "filePath": "tailwind.config.js",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    },
+    {
+      "id": "vite.config.ts::vite.config.ts",
+      "kind": "file",
+      "name": "vite.config.ts",
+      "qualifiedName": "vite.config.ts",
+      "filePath": "vite.config.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 0
+        }
+      },
+      "exported": true,
+      "visibility": "public",
+      "metadata": {}
+    }
+  ],
+  "scopes": [
+    {
+      "id": "scope:postcss.config.js:global:0:0:6:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "postcss.config.js::postcss.config.js",
+      "filePath": "postcss.config.js",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "scope:src/App.tsx:global:0:0:23:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "src/App.tsx::src/App.tsx",
+      "filePath": "src/App.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "scope:src/App.tsx:function:9:0:20:1",
+      "kind": "function",
+      "parentScopeId": "scope:src/App.tsx:global:0:0:23:0",
+      "ownerSymbolId": "src/App.tsx::App",
+      "filePath": "src/App.tsx",
+      "range": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 1
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "scope:src/components/Layout.tsx:global:0:0:32:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 32,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "scope:src/main.tsx:global:0:0:10:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "src/main.tsx::src/main.tsx",
+      "filePath": "src/main.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "scope:src/pages/HomePage.tsx:global:0:0:32:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "src/pages/HomePage.tsx::src/pages/HomePage.tsx",
+      "filePath": "src/pages/HomePage.tsx",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 32,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "scope:tailwind.config.js:global:0:0:11:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "tailwind.config.js::tailwind.config.js",
+      "filePath": "tailwind.config.js",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "scope:vite.config.ts:global:0:0:13:0",
+      "kind": "global",
+      "parentScopeId": null,
+      "ownerSymbolId": "vite.config.ts::vite.config.ts",
+      "filePath": "vite.config.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 0
+        }
+      },
+      "metadata": {}
+    }
+  ],
+  "containments": [
+    {
+      "parentId": "::create-a-todo-web-app",
+      "childId": "postcss.config.js::postcss.config.js",
+      "kind": "owns"
+    },
+    {
+      "parentId": "::create-a-todo-web-app",
+      "childId": "src/App.tsx::src/App.tsx",
+      "kind": "owns"
+    },
+    {
+      "parentId": "::create-a-todo-web-app",
+      "childId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "kind": "owns"
+    },
+    {
+      "parentId": "::create-a-todo-web-app",
+      "childId": "src/main.tsx::src/main.tsx",
+      "kind": "owns"
+    },
+    {
+      "parentId": "::create-a-todo-web-app",
+      "childId": "src/pages/HomePage.tsx::src/pages/HomePage.tsx",
+      "kind": "owns"
+    },
+    {
+      "parentId": "::create-a-todo-web-app",
+      "childId": "tailwind.config.js::tailwind.config.js",
+      "kind": "owns"
+    },
+    {
+      "parentId": "::create-a-todo-web-app",
+      "childId": "vite.config.ts::vite.config.ts",
+      "kind": "owns"
+    },
+    {
+      "parentId": "external::react-dom/client::ReactDOM",
+      "childId": "external::react-dom/client::ReactDOM::createRoot",
+      "kind": "has_member"
+    },
+    {
+      "parentId": "external::path::path",
+      "childId": "external::path::path::resolve",
+      "kind": "has_member"
+    }
+  ],
+  "resolvedReferences": [
+    {
+      "candidateId": "ref:src/App.tsx::src/App.tsx:React:0:7:0:12",
+      "fromSymbolId": "src/App.tsx::src/App.tsx",
+      "toSymbolId": "external::react::React",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/App.tsx::src/App.tsx:Router:1:26:1:32",
+      "fromSymbolId": "src/App.tsx::src/App.tsx",
+      "toSymbolId": "external::react-router-dom::BrowserRouter",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/App.tsx::src/App.tsx:Routes:1:34:1:40",
+      "fromSymbolId": "src/App.tsx::src/App.tsx",
+      "toSymbolId": "external::react-router-dom::Routes",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/App.tsx::src/App.tsx:Route:1:42:1:47",
+      "fromSymbolId": "src/App.tsx::src/App.tsx",
+      "toSymbolId": "external::react-router-dom::Route",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/App.tsx::src/App.tsx:HomePage:2:7:2:15",
+      "fromSymbolId": "src/App.tsx::src/App.tsx",
+      "toSymbolId": "external::./pages/HomePage::HomePage",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/App.tsx::src/App.tsx:Layout:3:7:3:13",
+      "fromSymbolId": "src/App.tsx::src/App.tsx",
+      "toSymbolId": "external::./components/Layout::Layout",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/components/Layout.tsx::src/components/Layout.tsx:React:0:7:0:12",
+      "fromSymbolId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "toSymbolId": "external::react::React",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/components/Layout.tsx::src/components/Layout.tsx:Outlet:1:9:1:15",
+      "fromSymbolId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "toSymbolId": "external::react-router-dom::Outlet",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/main.tsx::src/main.tsx:React:0:7:0:12",
+      "fromSymbolId": "src/main.tsx::src/main.tsx",
+      "toSymbolId": "external::react::React",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/main.tsx::src/main.tsx:ReactDOM:1:7:1:15",
+      "fromSymbolId": "src/main.tsx::src/main.tsx",
+      "toSymbolId": "external::react-dom/client::ReactDOM",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/main.tsx::src/main.tsx:App:2:7:2:10",
+      "fromSymbolId": "src/main.tsx::src/main.tsx",
+      "toSymbolId": "external::./App.tsx::App",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/pages/HomePage.tsx::src/pages/HomePage.tsx:React:0:7:0:12",
+      "fromSymbolId": "src/pages/HomePage.tsx::src/pages/HomePage.tsx",
+      "toSymbolId": "external::react::React",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/pages/HomePage.tsx::src/pages/HomePage.tsx:Link:1:9:1:13",
+      "fromSymbolId": "src/pages/HomePage.tsx::src/pages/HomePage.tsx",
+      "toSymbolId": "external::react-router-dom::Link",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:vite.config.ts::vite.config.ts:defineConfig:0:9:0:21",
+      "fromSymbolId": "vite.config.ts::vite.config.ts",
+      "toSymbolId": "external::vite::defineConfig",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:vite.config.ts::vite.config.ts:react:1:7:1:12",
+      "fromSymbolId": "vite.config.ts::vite.config.ts",
+      "toSymbolId": "external::@vitejs/plugin-react::react",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:vite.config.ts::vite.config.ts:path:2:7:2:11",
+      "fromSymbolId": "vite.config.ts::vite.config.ts",
+      "toSymbolId": "external::path::path",
+      "kind": "import",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:src/components/Layout.tsx::src/components/Layout.tsx:Date:25:23:25:27",
+      "fromSymbolId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "toSymbolId": "external::builtin::Date",
+      "kind": "instantiate",
+      "resolutionMethod": "global_fallback"
+    },
+    {
+      "candidateId": "ref:src/main.tsx::src/main.tsx:ReactDOM.createRoot:5:0:5:19",
+      "fromSymbolId": "src/main.tsx::src/main.tsx",
+      "toSymbolId": "external::react-dom/client::ReactDOM::createRoot",
+      "kind": "call",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:vite.config.ts::vite.config.ts:defineConfig:5:15:5:27",
+      "fromSymbolId": "vite.config.ts::vite.config.ts",
+      "toSymbolId": "external::vite::defineConfig",
+      "kind": "call",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:vite.config.ts::vite.config.ts:react:6:12:6:17",
+      "fromSymbolId": "vite.config.ts::vite.config.ts",
+      "toSymbolId": "external::@vitejs/plugin-react::react",
+      "kind": "call",
+      "resolutionMethod": "import"
+    },
+    {
+      "candidateId": "ref:vite.config.ts::vite.config.ts:path.resolve:9:11:9:23",
+      "fromSymbolId": "vite.config.ts::vite.config.ts",
+      "toSymbolId": "external::path::path::resolve",
+      "kind": "call",
+      "resolutionMethod": "import"
+    }
+  ],
+  "unresolvedReferences": [
+    {
+      "id": "ref:src/App.tsx::App:JSX.Element:9:16:9:27",
+      "fromSymbolId": "src/App.tsx::App",
+      "kind": "type_use",
+      "rawName": "JSX.Element",
+      "qualifierChain": [
+        "JSX.Element"
+      ],
+      "astNodeType": "type_annotation",
+      "filePath": "src/App.tsx",
+      "range": {
+        "start": {
+          "line": 9,
+          "column": 16
+        },
+        "end": {
+          "line": 9,
+          "column": 27
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "ref:src/components/Layout.tsx::src/components/Layout.tsx:React.FC:8:14:8:22",
+      "fromSymbolId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "kind": "type_use",
+      "rawName": "React.FC",
+      "qualifierChain": [
+        "React.FC"
+      ],
+      "astNodeType": "type_annotation",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 14
+        },
+        "end": {
+          "line": 8,
+          "column": 22
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "ref:src/components/Layout.tsx::src/components/Layout.tsx:JSX.Element:8:29:8:40",
+      "fromSymbolId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "kind": "type_use",
+      "rawName": "JSX.Element",
+      "qualifierChain": [
+        "JSX.Element"
+      ],
+      "astNodeType": "type_annotation",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 29
+        },
+        "end": {
+          "line": 8,
+          "column": 40
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "ref:src/components/Layout.tsx::src/components/Layout.tsx:new Date().getFullYear:25:19:25:41",
+      "fromSymbolId": "src/components/Layout.tsx::src/components/Layout.tsx",
+      "kind": "call",
+      "rawName": "new Date().getFullYear",
+      "qualifierChain": [
+        "new Date()",
+        "getFullYear"
+      ],
+      "astNodeType": "call_expression",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 25,
+          "column": 19
+        },
+        "end": {
+          "line": 25,
+          "column": 41
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "ref:src/main.tsx::src/main.tsx:ReactDOM.createRoot(document.getElementById('root')!).render:5:0:5:60",
+      "fromSymbolId": "src/main.tsx::src/main.tsx",
+      "kind": "call",
+      "rawName": "ReactDOM.createRoot(document.getElementById('root')!).render",
+      "qualifierChain": [
+        "ReactDOM.createRoot(document.getElementById('root')!)",
+        "render"
+      ],
+      "astNodeType": "call_expression",
+      "filePath": "src/main.tsx",
+      "range": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 60
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "ref:src/main.tsx::src/main.tsx:document.getElementById:5:20:5:43",
+      "fromSymbolId": "src/main.tsx::src/main.tsx",
+      "kind": "call",
+      "rawName": "document.getElementById",
+      "qualifierChain": [
+        "document",
+        "getElementById"
+      ],
+      "astNodeType": "call_expression",
+      "filePath": "src/main.tsx",
+      "range": {
+        "start": {
+          "line": 5,
+          "column": 20
+        },
+        "end": {
+          "line": 5,
+          "column": 43
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "ref:src/pages/HomePage.tsx::src/pages/HomePage.tsx:React.FC:8:16:8:24",
+      "fromSymbolId": "src/pages/HomePage.tsx::src/pages/HomePage.tsx",
+      "kind": "type_use",
+      "rawName": "React.FC",
+      "qualifierChain": [
+        "React.FC"
+      ],
+      "astNodeType": "type_annotation",
+      "filePath": "src/pages/HomePage.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 16
+        },
+        "end": {
+          "line": 8,
+          "column": 24
+        }
+      },
+      "metadata": {}
+    },
+    {
+      "id": "ref:src/pages/HomePage.tsx::src/pages/HomePage.tsx:JSX.Element:8:31:8:42",
+      "fromSymbolId": "src/pages/HomePage.tsx::src/pages/HomePage.tsx",
+      "kind": "type_use",
+      "rawName": "JSX.Element",
+      "qualifierChain": [
+        "JSX.Element"
+      ],
+      "astNodeType": "type_annotation",
+      "filePath": "src/pages/HomePage.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 31
+        },
+        "end": {
+          "line": 8,
+          "column": 42
+        }
+      },
+      "metadata": {}
+    }
+  ],
+  "diagnostics": [
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'JSX.Element' could not be resolved",
+      "filePath": "src/App.tsx",
+      "range": {
+        "start": {
+          "line": 9,
+          "column": 16
+        },
+        "end": {
+          "line": 9,
+          "column": 27
+        }
+      },
+      "relatedCandidateId": "ref:src/App.tsx::App:JSX.Element:9:16:9:27"
+    },
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'React.FC' could not be resolved",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 14
+        },
+        "end": {
+          "line": 8,
+          "column": 22
+        }
+      },
+      "relatedCandidateId": "ref:src/components/Layout.tsx::src/components/Layout.tsx:React.FC:8:14:8:22"
+    },
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'JSX.Element' could not be resolved",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 29
+        },
+        "end": {
+          "line": 8,
+          "column": 40
+        }
+      },
+      "relatedCandidateId": "ref:src/components/Layout.tsx::src/components/Layout.tsx:JSX.Element:8:29:8:40"
+    },
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'new Date().getFullYear' could not be resolved",
+      "filePath": "src/components/Layout.tsx",
+      "range": {
+        "start": {
+          "line": 25,
+          "column": 19
+        },
+        "end": {
+          "line": 25,
+          "column": 41
+        }
+      },
+      "relatedCandidateId": "ref:src/components/Layout.tsx::src/components/Layout.tsx:new Date().getFullYear:25:19:25:41"
+    },
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'ReactDOM.createRoot(document.getElementById('root')!).render' could not be resolved",
+      "filePath": "src/main.tsx",
+      "range": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 60
+        }
+      },
+      "relatedCandidateId": "ref:src/main.tsx::src/main.tsx:ReactDOM.createRoot(document.getElementById('root')!).render:5:0:5:60"
+    },
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'document.getElementById' could not be resolved",
+      "filePath": "src/main.tsx",
+      "range": {
+        "start": {
+          "line": 5,
+          "column": 20
+        },
+        "end": {
+          "line": 5,
+          "column": 43
+        }
+      },
+      "relatedCandidateId": "ref:src/main.tsx::src/main.tsx:document.getElementById:5:20:5:43"
+    },
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'React.FC' could not be resolved",
+      "filePath": "src/pages/HomePage.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 16
+        },
+        "end": {
+          "line": 8,
+          "column": 24
+        }
+      },
+      "relatedCandidateId": "ref:src/pages/HomePage.tsx::src/pages/HomePage.tsx:React.FC:8:16:8:24"
+    },
+    {
+      "kind": "unresolved_reference",
+      "severity": "info",
+      "message": "Reference 'JSX.Element' could not be resolved",
+      "filePath": "src/pages/HomePage.tsx",
+      "range": {
+        "start": {
+          "line": 8,
+          "column": 31
+        },
+        "end": {
+          "line": 8,
+          "column": 42
+        }
+      },
+      "relatedCandidateId": "ref:src/pages/HomePage.tsx::src/pages/HomePage.tsx:JSX.Element:8:31:8:42"
+    }
+  ],
+  "projectRoot": "C:/Users/Juveria/Desktop/groupmasai/MAS_IDE/generated-projects/create-a-todo-web-app",
+  "createdAt": "2026-06-25T09:28:39.358Z",
+  "fileCount": 7,
+  "symbolCount": 11
+}

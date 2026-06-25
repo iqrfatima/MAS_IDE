@@ -44,6 +44,48 @@ def slugify(text: str) -> str:
     return slug.strip("-") or "project"
 
 
+def generate_diff(file_path: str, old_content: str, new_content: str) -> str:
+    import difflib
+    if not old_content:
+        # New file: all lines are additions
+        lines = new_content.splitlines()
+        diff_lines = [f"+ {line}" for line in lines]
+        return f"{file_path}\n" + "\n".join(diff_lines)
+        
+    # Existing file: compute diff using unified_diff
+    old_lines = old_content.splitlines()
+    new_lines = new_content.splitlines()
+    
+    diff = difflib.unified_diff(
+        old_lines,
+        new_lines,
+        fromfile="a/" + file_path,
+        tofile="b/" + file_path,
+        lineterm=""
+    )
+    
+    formatted_lines = []
+    diff_list = list(diff)
+    if len(diff_list) >= 2:
+        start_idx = 0
+        if diff_list[0].startswith("---") and diff_list[1].startswith("+++"):
+            start_idx = 2
+        for line in diff_list[start_idx:]:
+            if line.startswith("@@"):
+                formatted_lines.append(line)
+            elif line.startswith("-"):
+                formatted_lines.append(f"- {line[1:]}")
+            elif line.startswith("+"):
+                formatted_lines.append(f"+ {line[1:]}")
+            else:
+                content = line[1:] if line.startswith(" ") else line
+                formatted_lines.append(f"  {content}")
+    else:
+        return ""
+        
+    return f"{file_path}\n" + "\n".join(formatted_lines)
+
+
 @dataclass
 class AgentMessage:
     type: str
@@ -312,8 +354,25 @@ Return only JSON.
         self.apply_graph_updates(result.get("graphUpdates"))
 
         for file_entry in result.get("files", []):
-            if file_entry.get("path") and file_entry.get("content") is not None:
+            path = file_entry.get("path")
+            content = file_entry.get("content")
+            if path and content is not None:
+                # Find the most recent content for this path in generated_files
+                old_content = ""
+                for existing in reversed(self.state.generated_files):
+                    if existing["path"] == path:
+                        old_content = existing["content"]
+                        break
+
+                diff_text = generate_diff(path, old_content, content)
+                if diff_text:
+                    self.add_message(
+                        "agent",
+                        agent_id,
+                        f"```diff\n{diff_text}\n```"
+                    )
+
                 self.state.generated_files.append({
-                    "path": file_entry["path"],
-                    "content": file_entry["content"],
+                    "path": path,
+                    "content": content,
                 })

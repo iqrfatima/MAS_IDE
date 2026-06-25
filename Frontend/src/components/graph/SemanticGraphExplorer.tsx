@@ -53,7 +53,7 @@ function LegendSection() {
       <h4 style={{ margin: '0 0 12px 0', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.5, color: 'var(--text-secondary)' }}>
         Graph Legend
       </h4>
-      
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div>
           <div style={{ fontSize: 9, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', marginBottom: 6 }}>Symbols (Nodes)</div>
@@ -90,13 +90,13 @@ function LegendSection() {
                 <span>{item.label}</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <span style={{ fontSize: 8, color: 'var(--text-muted)' }}>{item.desc}</span>
-                  <div 
-                    style={{ 
-                      width: 20, 
-                      height: item.style === 'solid' ? 2 : 0, 
+                  <div
+                    style={{
+                      width: 20,
+                      height: item.style === 'solid' ? 2 : 0,
                       borderTop: item.style !== 'solid' ? `1px ${item.style} ${item.color}` : 'none',
                       backgroundColor: item.style === 'solid' ? item.color : 'transparent',
-                    }} 
+                    }}
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ function SemanticGraphExplorerContent() {
       })
       .catch((err) => {
         setError(
-          err.response?.data?.detail || 
+          err.response?.data?.detail ||
           "Failed to load semantic model. Make sure MASAI analysis has run and generated a .masai/semantic-model.json file for this project."
         );
         setIsLoading(false);
@@ -342,7 +342,7 @@ function SemanticGraphExplorerContent() {
       if (neighborhoodNodeId) {
         const isSelf = nodeId === neighborhoodNodeId;
         const isNeighbor = connectedNodeIds.has(nodeId);
-        
+
         if (isSelf || isNeighbor) {
           visibility.set(nodeId, true);
           return true;
@@ -545,7 +545,7 @@ function SemanticGraphExplorerContent() {
               </button>
             ))}
           </div>
-          
+
           <div className="search-container">
             <Search className="search-icon" size={14} />
             <input
@@ -931,7 +931,7 @@ function SemanticGraphExplorerContent() {
                         L{selectedSymbol.range?.start?.line + 1 || 1} - L{selectedSymbol.range?.end?.line + 1 || 1}
                       </span>
                     </div>
-                    
+
                     {Object.entries(selectedSymbol.metadata || {}).map(([key, val]) => {
                       if (typeof val === 'object') return null;
                       return (
@@ -960,7 +960,7 @@ function SemanticGraphExplorerContent() {
                         Neighborhood
                       </button>
                     </div>
-                    
+
                     <button
                       className="action-btn"
                       onClick={() => {

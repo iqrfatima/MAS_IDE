@@ -119,11 +119,13 @@ import { readFile } from "../../services/api/projects";
 interface ExplorerProps {
   activeProjectName: string;
   onSelectProject: (name: string) => void;
+  width?: number;
 }
 
 function Explorer({
   activeProjectName,
   onSelectProject,
+  width,
 }: ExplorerProps) {
   const {
     projects,
@@ -131,7 +133,10 @@ function Explorer({
   } = useProjectStore();
 
   return (
-    <aside className="w-[240px] flex-shrink-0 border-r border-outline bg-surface-container-low flex flex-col h-full select-none">
+    <aside 
+      style={width ? { width: `${width}px` } : undefined}
+      className="w-[240px] flex-shrink-0 border-r border-outline bg-surface-container-low flex flex-col h-full select-none"
+    >
       {/* Sidebar Header */}
       <div className="px-3 py-2 flex items-center justify-between opacity-60 flex-shrink-0">
         <span className="text-[11px] font-bold uppercase tracking-wider">Explorer</span>
@@ -151,6 +156,7 @@ function Explorer({
             onChange={(e) => onSelectProject(e.target.value)}
             className="w-full bg-background border border-outline rounded px-2 py-0.5 text-[11px] text-primary font-mono focus:outline-none focus:border-primary cursor-pointer"
           >
+            <option value="">New project / Auto-detect</option>
             {projects.map((project) => (
               <option key={project.project_name} value={project.project_name}>
                 {project.project_name}

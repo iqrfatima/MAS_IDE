@@ -3,19 +3,18 @@ import { useEffect, useState, useRef } from "react";
 import Navbar from "./components/layout/Navbar";
 import Explorer from "./components/explorer/Explorer";
 import EditorPanel from "./components/editor/EditorPanel";
-import TerminalConsole from "./components/editor/TerminalConsole";
 import TeamLivePanel from "./components/chat/TeamLivePanel";
+import AgentsPanel from "./components/chat/AgentsPanel";
 import SemanticGraphExplorer from "./components/graph/SemanticGraphExplorer";
 
 import { getProjects } from "./services/api/projects";
 import { runAgentsStream, type AgentMessage } from "./services/api/agents";
 import { useProjectStore } from "./store/projectStore";
 
-type AppView = "ide" | "graph";
+type AppView = "agents" | "explorer" | "graph";
 
 function App() {
-  const [activeView, setActiveView] = useState<AppView>("ide");
-  const [terminalHeight, setTerminalHeight] = useState(256);
+  const [activeView, setActiveView] = useState<AppView>("explorer");
 
   // Lifted generation states
   const [prompt, setPrompt] = useState("");
@@ -27,8 +26,58 @@ function App() {
   const abortRef = useRef<AbortController | null>(null);
   const terminalInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Sidebar Width States
+  const [explorerWidth, setExplorerWidth] = useState(240);
+  const [agentsPanelWidth, setAgentsPanelWidth] = useState(550);
+  const [activeResizer, setActiveResizer] = useState<"explorer" | "team" | null>(null);
+
+  const startResizeExplorer = (mouseDownEvent: React.MouseEvent) => {
+    mouseDownEvent.preventDefault();
+    setActiveResizer("explorer");
+    const startX = mouseDownEvent.clientX;
+    const startWidth = explorerWidth;
+
+    const onMouseMove = (mouseMoveEvent: MouseEvent) => {
+      const newWidth = startWidth + (mouseMoveEvent.clientX - startX);
+      if (newWidth >= 160 && newWidth <= 450) {
+        setExplorerWidth(newWidth);
+      }
+    };
+
+    const onMouseUp = () => {
+      setActiveResizer(null);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  };
+
+  const startResizeAgentsPanel = (mouseDownEvent: React.MouseEvent) => {
+    mouseDownEvent.preventDefault();
+    setActiveResizer("team");
+    const startX = mouseDownEvent.clientX;
+    const startWidth = agentsPanelWidth;
+
+    const onMouseMove = (mouseMoveEvent: MouseEvent) => {
+      const newWidth = startWidth + (mouseMoveEvent.clientX - startX);
+      if (newWidth >= 300 && newWidth <= 900) {
+        setAgentsPanelWidth(newWidth);
+      }
+    };
+
+    const onMouseUp = () => {
+      setActiveResizer(null);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  };
+
   const {
-    projects,
     setProjects,
     geminiApiKey,
     clearLogs,
@@ -49,12 +98,7 @@ function App() {
     loadProjects();
   }, []);
 
-  // Sync first project as targetProject when projects load
-  useEffect(() => {
-    if (projects.length > 0 && !targetProject) {
-      setTargetProject(projects[0].project_name);
-    }
-  }, [projects, targetProject]);
+
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
@@ -141,50 +185,71 @@ function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background text-on-background font-sans text-ui overflow-hidden">
+    <div className="h-screen flex flex-col bg-background text-on-background font-sans text-ui overflow-hidden relative">
+      {activeResizer && (
+        <div className="fixed inset-0 z-[9999] cursor-col-resize select-none" />
+      )}
       <Navbar
         activeView={activeView}
         onViewChange={setActiveView}
       />
 
-      {activeView === "ide" ? (
+      {activeView !== "graph" ? (
         <div className="flex flex-1 overflow-hidden min-h-0">
           {/* Left Sidebar */}
           <Explorer 
             activeProjectName={targetProject}
             onSelectProject={setTargetProject}
+            width={explorerWidth}
           />
 
-          {/* Center Stage */}
-          <section className="flex-1 flex flex-col bg-background relative overflow-hidden min-w-0">
-            {/* Top Half: Editor */}
-            <div className="flex-1 flex flex-col border-b border-outline min-h-[40%] overflow-hidden">
+          {/* Left Resizer Handle */}
+          <div
+            onMouseDown={startResizeExplorer}
+            className={`w-1.5 -ml-1 cursor-col-resize hover:bg-primary/50 transition-colors h-full z-50 flex-shrink-0 ${
+              activeResizer === "explorer" ? "bg-primary" : ""
+            }`}
+          />
+
+          {activeView === "explorer" ? (
+            /* Developer Workspace (Editor only) */
+            <section className="flex-1 flex flex-col bg-background relative overflow-hidden min-w-0">
               <EditorPanel />
-            </div>
+            </section>
+          ) : (
+            /* Agents Collaboration Workspace (Chat logs + Team Roster) */
+            <>
+              {/* Center Panel: Full Chat Feed and Control Dock */}
+              <AgentsPanel
+                prompt={prompt}
+                setPrompt={setPrompt}
+                selectedAgent={selectedAgent}
+                setSelectedAgent={setSelectedAgent}
+                targetProject={targetProject}
+                setTargetProject={setTargetProject}
+                loading={loading}
+                error={error}
+                handleGenerate={handleGenerate}
+                inputRef={terminalInputRef}
+                width={agentsPanelWidth}
+              />
 
-            {/* Bottom Half: Terminal Console */}
-            <TerminalConsole
-              prompt={prompt}
-              setPrompt={setPrompt}
-              selectedAgent={selectedAgent}
-              setSelectedAgent={setSelectedAgent}
-              targetProject={targetProject}
-              setTargetProject={setTargetProject}
-              loading={loading}
-              error={error}
-              handleGenerate={handleGenerate}
-              inputRef={terminalInputRef}
-              height={terminalHeight}
-              setHeight={setTerminalHeight}
-            />
-          </section>
+              {/* Right Resizer Handle */}
+              <div
+                onMouseDown={startResizeAgentsPanel}
+                className={`w-1.5 -mr-1 cursor-col-resize hover:bg-primary/50 transition-colors h-full z-50 flex-shrink-0 ${
+                  activeResizer === "team" ? "bg-primary" : ""
+                }`}
+              />
 
-          {/* Right Sidebar */}
-          <TeamLivePanel
-            selectedAgent={selectedAgent}
-            setSelectedAgent={setSelectedAgent}
-            onBroadcastClick={handleBroadcastClick}
-          />
+              {/* Right Sidebar: Agent Swarm Control */}
+              <TeamLivePanel
+                selectedAgent={selectedAgent}
+                setSelectedAgent={setSelectedAgent}
+                onBroadcastClick={handleBroadcastClick}
+              />
+            </>
+          )}
         </div>
       ) : (
         <SemanticGraphExplorer />

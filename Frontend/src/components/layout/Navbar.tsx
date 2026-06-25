@@ -1,4 +1,4 @@
-type AppView = "ide" | "graph";
+type AppView = "agents" | "explorer" | "graph";
 
 interface NavbarProps {
   activeView: AppView;
@@ -12,8 +12,8 @@ function Navbar({
 
   const tabClass = (view: AppView) =>
     activeView === view
-      ? "px-2 py-0.5 text-on-surface hover:bg-outline/20 rounded-sm transition-colors text-[11px] font-mono bg-outline/15 select-none"
-      : "px-2 py-0.5 text-on-surface-variant hover:text-on-surface hover:bg-outline/20 rounded-sm transition-colors text-[11px] font-mono select-none";
+      ? "px-2 py-0.5 text-on-surface hover:bg-outline/20 rounded-sm transition-colors text-[11px] font-mono bg-outline/15 select-none cursor-pointer"
+      : "px-2 py-0.5 text-on-surface-variant hover:text-on-surface hover:bg-outline/20 rounded-sm transition-colors text-[11px] font-mono select-none cursor-pointer";
 
   return (
     <header className="bg-surface-container-low border-b border-outline h-9 flex justify-between items-center px-3 flex-shrink-0 z-50">
@@ -24,10 +24,16 @@ function Navbar({
         </div>
         <nav className="hidden md:flex items-center gap-1">
           <button
-            onClick={() => onViewChange("ide")}
-            className={tabClass("ide")}
+            onClick={() => onViewChange("agents")}
+            className={tabClass("agents")}
           >
-            IDE
+            Agents
+          </button>
+          <button
+            onClick={() => onViewChange("explorer")}
+            className={tabClass("explorer")}
+          >
+            Explorer
           </button>
           <button
             onClick={() => onViewChange("graph")}
